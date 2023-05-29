@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/admin/user_list/edit/{id}(id=${user.getId()})}" th:object="${user}" >
+    <h3>Логин</h3>
+    <p th:text="${user.getLogin()}"></p>
+        <select name="role" th:field ="*{role}">
+            <option th:each="enum:${T(com.example.springsecurityapplication.enumm.Roles).values()}" th:text="${enum}" th:value="${enum}">
+
+            </option>
+        </select>
+
+    <input type="submit" value="Изменить роль">
+</form>
+
+
+</body>
+</html>

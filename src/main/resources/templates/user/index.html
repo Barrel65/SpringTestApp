@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 3% 15%;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+
+
+        .product-card {
+            display: inline-block;
+            width: 22.5%;
+            margin: 5px 1% 20px 1%;
+            border: 1px solid black;
+            border-radius: 8px;
+            padding: 1%;
+
+            vertical-align: top;
+            text-align: center;
+            height: 550px;
+        }
+
+        .product-card img {
+            width: 85%;
+        }
+
+        .product-card a {
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .product-card p {
+            margin: 10px 0;
+        }
+
+        .product-card a.addToCart {
+            display: inline-block;
+            color: #fff;
+            background-color: #333;
+            padding: 5px 10px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+
+        .product-card a.addToCart:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="d-flex justify-content-between">
+    <div>
+        <h1>Личный кабинет</h1>
+        <div class="d-flex justify-content-between">
+            <form method="get" th:action="@{/cart}">
+                <button type="submit" class="btn btn-secondary">Корзина</button>
+            </form>
+
+            <form method="get" th:action="@{/orders}">
+                <input type="submit" value="Заказы" class="btn btn-secondary">
+            </form>
+        </div>
+    </div>
+    <form method="post" action="/logout">
+        <button type="submit" class="btn btn-secondary">Выйти из личного кабинета</button>
+    </form>
+</div>
+
+
+
+
+
+<h3>Сортировка, поиск, фильтрация</h3>
+<form th:method="POST" th:action="@{/person account/product/search}">
+    <fieldset>
+        <legend>Выберите параметры для сортировки, поиска, фильтрации:</legend>
+        <div class="form-group">
+            <label for="search">Поиск по наименованию</label>
+            <input type="text" id="search" name="search" th:value="*{value_search}" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label>Цена, P</label>
+            <div class="form-row">
+                <div class="col">
+                    <label for="ot">От</label>
+                    <input type="text" name="ot" id="ot" th:value="*{value_price_ot}" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="do">До</label>
+                    <input type="text" name="do" id="do" th:value="*{value_price_do}" class="form-control">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="d-flex justify-content-between">
+            <div class="form-group">
+                <label>Сортировка по цене</label>
+                <div class="form-check">
+                    <input type="radio" id="ascending_price" name="price" value="sorted_by_ascending_price" class="form-check-input">
+                    <label for="ascending_price" class="form-check-label">Отсортировать по возрастанию цены</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="descending_price" name="price" value="sorted_by_descending_price" class="form-check-input">
+                    <label for="descending_price" class="form-check-label">Отсортировать по убыванию цены</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Категория товаров</label>
+                <div class="form-check">
+                    <input type="radio" id="furniture" name="contract" value="furniture" class="form-check-input">
+                    <label for="furniture" class="form-check-label">Мебель</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="appliances" name="contract" value="appliances" class="form-check-input">
+                    <label for="appliances" class="form-check-label">Бытовая техника</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="clothes" name="contract" value="clothes" class="form-check-input">
+                    <label for="clothes" class="form-check-label">Одежда</label>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-secondary" style="width: 200px">Найти</button>
+    </fieldset>
+</form>
+
+<hr>
+
+<h3>Результат поиска, сортировки, фильтрации</h3>
+<div th:each="product : ${search_product}" class="product-card">
+    <img th:src="'/img/' + ${product.imageList[0].getFileName()}" class="img-fluid">
+    <br>
+    <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+    <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+    <hr>
+</div>
+
+<hr>
+
+<h3>Доступные товары:</h3>
+<div th:each="product : ${products}" class="product-card">
+    <img th:src="'/img/' + ${product.imageList[0].getFileName()}" class="img-fluid">
+    <br>
+    <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
+    <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+    <a th:href="@{/cart/add/{id}(id=${product.getId()})}" class="btn btn-primary addToCart">Добавить товар в корзину</a>
+    <hr>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

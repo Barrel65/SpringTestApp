@@ -2,9 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Личный кабинет администратора</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #000;
+            margin: 0 15%;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logout-button {
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .container form {
+            margin-right: 20px;
+        }
+
+        .container input[type="submit"],
+        .add-product-link,
+        .edit-product-button,
+        .delete-product-button {
+            padding: 8px 20px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 10px;
+            float: left;
+        }
+
+        .edit-product-button,
+        .delete-product-button {
+            padding: 5px 20px;
+
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+
+        .product-item {
+            margin-bottom: 20px;
+        }
+
+        .product-item p {
+            margin-bottom: 5px;
+        }
+
+        .product-item a {
+            margin-right: 10px;
+        }
+
+        .product-actions {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .product-actions button {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
-<h1>Личный кабинет администратора</h1>
+<div class="header">
+    <h1>Личный кабинет администратора</h1>
+    <form method="post" action="/logout">
+        <button type="submit" class="logout-button">Выйти из личного кабинета</button>
+    </form>
+</div>
+
+<div class="container">
+    <form method="get" action="/admin/orders">
+        <input type="submit" value="Заказы">
+    </form>
+
+    <form method="get" action="/admin/user_list">
+        <input type="submit" value="Список зарегистрированных пользователей">
+    </form>
+
+    <form method="get" action="/admin/product/add">
+        <input type="submit" value="Добавить товар">
+    </form>
+
+
+</div>
+
+<hr>
+
+<div th:each="product : ${products}" class="product-item">
+    <p th:text="'Наименование: ' + ${product.getTitle()}"></p>
+    <p th:text="'Описание: ' + ${product.getDescription()}"></p>
+    <p th:text="'Цена: ' + ${product.getPrice()}"></p>
+    <p th:text="'Склад: ' + ${product.getWarehouse()}"></p>
+    <p th:text="'Продавец: ' + ${product.getSeller()}"></p>
+    <p th:text="'Категория: ' + ${product.getCategory().getName()}"></p>
+    <a class="edit-product-button" th:href="@{/admin/product/edit/{id}(id=${product.getId()})}">Редактирование товара</a>
+    <a class="delete-product-button" th:href="@{/admin/product/delete/{id}(id=${product.getId()})}">Удаление товара</a>
+    <br><br><br>
+    <hr>
+</div>
 </body>
 </html>

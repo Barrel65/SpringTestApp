@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о товаре</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 3% 15%;
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+<h3 class="mb-3">Информация о товаре:</h3>
+<div class="row">
+    <div class="col-md-6">
+        <p class="mb-2"><strong>Наименование:</strong> <span th:text="${product.getTitle()}"></span></p>
+        <p class="mb-2"><strong>Описание:</strong> <span th:text="${product.getDescription()}"></span></p>
+        <p class="mb-2"><strong>Цена:</strong> <span th:text="${product.getPrice()}"></span></p>
+        <p class="mb-2"><strong>Склад:</strong> <span th:text="${product.getWarehouse()}"></span></p>
+        <p class="mb-2"><strong>Продавец:</strong> <span th:text="${product.getSeller()}"></span></p>
+        <p class="mb-2"><strong>Категория:</strong> <span th:text="${product.getCategory().getName()}"></span></p>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-6">
+                <div th:each="img : ${product.getImageList()}" class="mb-3">
+                    <img th:src="'/img/' + ${img.getFileName()}" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

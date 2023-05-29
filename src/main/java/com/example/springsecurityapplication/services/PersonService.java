@@ -31,4 +31,12 @@ public class PersonService {
         person.setRole("ROLE_USER");
         personRepository.save(person);
     }
+
+    @Transactional
+    public void editRole(int id, String role){
+        Person person= personRepository.getReferenceById(id);
+        person.setRole(role);
+        personRepository.save(person);
+    }
+
 }
